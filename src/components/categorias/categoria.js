@@ -6,6 +6,7 @@ import {FilterIcon, MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid'
 import { connect } from 'react-redux'
 import {get_categories} from '../../redux/actions/categories'
 import {get_products, get_filtered_products} from '../../redux/actions/products'
+import { add_wishlist_item, get_wishlist_items, get_wishlist_item_total, remove_wishlist_item } from '../../redux/actions/wishlist'
 import ProductCard from '../../components/products/ProductCard'
 // En el archivo que importa (categoria.js)
 import { prices } from '../../helpers/fixedPrices';
@@ -73,7 +74,13 @@ const Categorias = ({
   get_products,
   products,
   get_filtered_products,
-  filtered_products
+  filtered_products,
+  isAuthenticated,
+  wishlist,
+  add_wishlist_item,
+  get_wishlist_items,
+  get_wishlist_item_total,
+  remove_wishlist_item
 }) => {
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
@@ -97,8 +104,22 @@ const Categorias = ({
   useEffect(() => {
       get_categories()
       get_products()
+      get_wishlist_items()
+      get_wishlist_item_total()
       window.scrollTo(0,0)
   }, [])
+
+  const addToWishlist = async (product, isPresent) => {
+    if (isAuthenticated) {
+      if (isPresent) {
+        await remove_wishlist_item(product.id);
+      } else {
+        await add_wishlist_item(product.id);
+      }
+      await get_wishlist_items();
+      await get_wishlist_item_total();
+    }
+  }
 
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value})
@@ -122,7 +143,7 @@ const Categorias = ({
       filtered_products.map((product, index) => {
           return display.push(
               <div key={index}>
-                  <ProductCard product={product}/>
+                  <ProductCard product={product} wishlist={wishlist} addToWishlist={(isPresent) => addToWishlist(product, isPresent)}/>
               </div>
           );
       });
@@ -135,7 +156,7 @@ const Categorias = ({
         products.map((product, index) => {
           return display.push(
               <div key={index}>
-                  <ProductCard product={product}/>
+                  <ProductCard product={product} wishlist={wishlist} addToWishlist={(isPresent) => addToWishlist(product, isPresent)}/>
               </div>
           );
       });
@@ -159,7 +180,7 @@ const Categorias = ({
 
   return (
      
-          <div className="bg-sofi-50">
+          <div>
     <div>
       {/* Mobile filter dialog */}
       <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -607,11 +628,17 @@ const Categorias = ({
 const mapStateToProps = state => ({
   categories: state.Categories.categories,
   products: state.Products.products,
-  filtered_products: state.Products.filtered_products
+  filtered_products: state.Products.filtered_products,
+  isAuthenticated: state.auth.isAuthenticated,
+  wishlist: state.Wishlist.items
 })
 
-export default connect(mapStateToProps,{
+export default connect(mapStateToProps, {
   get_categories,
   get_products,
-  get_filtered_products
+  get_filtered_products,
+  add_wishlist_item,
+  get_wishlist_items,
+  get_wishlist_item_total,
+  remove_wishlist_item
 })(Categorias)

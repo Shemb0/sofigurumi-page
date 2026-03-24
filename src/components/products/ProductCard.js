@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom"
-const ProductCard =({product})=>{
+import WishlistHeart from "./wishlistHeart"
+
+const ProductCard = ({ product, wishlist, addToWishlist }) => {
     return(
         <div key={product.id} className="group relative bg-white rounded-2xl border border-sofi-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
           {/* Imagen */}
@@ -24,7 +26,14 @@ const ProductCard =({product})=>{
                 {product.name}
               </Link>
             </h3>
-            <p className="text-sm font-bold text-sofi-500 ml-2 flex-shrink-0">${product.price}</p>
+            <div className="flex items-center flex-shrink-0">
+              <p className="text-sm font-bold text-sofi-500">${product.price}</p>
+              <WishlistHeart
+                product={product}
+                wishlist={wishlist}
+                addToWishlist={addToWishlist}
+              />
+            </div>
           </div>
         </div>
     )

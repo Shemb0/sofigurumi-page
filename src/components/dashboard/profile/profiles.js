@@ -61,7 +61,7 @@ const Profile = ({
   if (!isAuthenticated) return <Navigate to="/" />;
 
   return (
-    <div className="min-h-screen bg-sofi-50">
+    <div className="min-h-screen">
       <DashboardLink
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}

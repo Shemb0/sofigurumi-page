@@ -12,7 +12,7 @@ class GetItemsView(APIView):
     def get(self, request, format=None):
         user = self.request.user
         try:
-            cart = Cart.objects.get(user=user)
+            cart = Cart.objects.get_or_create(user=user)[0]
             cart_items = CartItem.objects.order_by('product').filter(cart=cart)
 
             result = []
@@ -24,7 +24,7 @@ class GetItemsView(APIView):
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
                     product = Product.objects.get(id=cart_item.product.id)
-                    product = ProductSerializer(product)
+                    product = ProductSerializer(product, context={'request': request})
 
                     item['product'] = product.data
 
@@ -58,7 +58,7 @@ class AddItemView(APIView):
             
             product = Product.objects.get(id=product_id)
             
-            cart = Cart.objects.get(user=user)
+            cart = Cart.objects.get_or_create(user=user)[0]
 
             if CartItem.objects.filter(cart=cart, product=product).exists():
                 return Response(
@@ -87,7 +87,7 @@ class AddItemView(APIView):
                         item['id'] = cart_item.id
                         item['count'] = cart_item.count
                         product = Product.objects.get(id=cart_item.product.id)
-                        product = ProductSerializer(product)
+                        product = ProductSerializer(product, context={'request': request})
 
                         item['product'] = product.data
 
@@ -109,7 +109,7 @@ class GetTotalView(APIView):
         user = self.request.user
 
         try:
-            cart = Cart.objects.get(user=user)
+            cart = Cart.objects.get_or_create(user=user)[0]
             cart_items = CartItem.objects.filter(cart=cart)
 
             total_cost = 0.0
@@ -137,7 +137,7 @@ class GetItemTotalView(APIView):
         user = self.request.user
 
         try:
-            cart = Cart.objects.get(user=user)
+            cart = Cart.objects.get_or_create(user=user)[0]
             total_items = cart.total_items
 
             return Response(
@@ -175,7 +175,7 @@ class UpdateItemView(APIView):
                     status=status.HTTP_404_NOT_FOUND)
             
             product = Product.objects.get(id=product_id)
-            cart = Cart.objects.get(user=user)
+            cart = Cart.objects.get_or_create(user=user)[0]
 
             if not CartItem.objects.filter(cart=cart, product=product).exists():
                 return Response(
@@ -200,7 +200,7 @@ class UpdateItemView(APIView):
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
                     product = Product.objects.get(id=cart_item.product.id)
-                    product = ProductSerializer(product)
+                    product = ProductSerializer(product, context={'request': request})
 
                     item['product'] = product.data
 
@@ -236,7 +236,7 @@ class RemoveItemView(APIView):
                     status=status.HTTP_404_NOT_FOUND)
             
             product = Product.objects.get(id=product_id)
-            cart = Cart.objects.get(user=user)
+            cart = Cart.objects.get_or_create(user=user)[0]
 
             if not CartItem.objects.filter(cart=cart, product=product).exists():
                 return Response(
@@ -261,7 +261,7 @@ class RemoveItemView(APIView):
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
                     product = Product.objects.get(id=cart_item.product.id)
-                    product = ProductSerializer(product)
+                    product = ProductSerializer(product, context={'request': request})
 
                     item['product'] = product.data
 
@@ -279,7 +279,7 @@ class EmptyCartView(APIView):
         user = self.request.user
 
         try:
-            cart = Cart.objects.get(user=user)
+            cart = Cart.objects.get_or_create(user=user)[0]
 
             if not CartItem.objects.filter(cart=cart).exists():
                 return Response(
@@ -309,7 +309,7 @@ class SynchCartView(APIView):
             cart_items = data['cart_items']
 
             for cart_item in cart_items:
-                cart = Cart.objects.get(user=user)
+                cart = Cart.objects.get_or_create(user=user)[0]
 
                 try:
                     product_id = int(cart_item['product_id'])

@@ -119,7 +119,8 @@ function CartPageContent({
             </button>
           ) : (
             <button
-              type="submit"
+              type="button"
+              onClick={buy}
               className="w-full py-3 rounded-full bg-sofi-400 text-white text-sm font-semibold hover:bg-sofi-500 hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sofi-300"
             >
               Confirmar pedido
@@ -133,7 +134,7 @@ function CartPageContent({
   if (made_payment) return <Navigate to="/TanksYou" />;
 
   return (
-    <div className="min-h-screen bg-sofi-50">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <div className="mb-8">

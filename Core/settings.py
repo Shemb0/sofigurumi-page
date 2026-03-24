@@ -249,7 +249,7 @@ EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
 
 
 if not DEBUG:
-    DEFAULT_FROM_EMAIL = 'ShoeStore - Tienda de Zapatillas <maxitunn@hotmail.com>'
+    DEFAULT_FROM_EMAIL = 'Sofigurumis <maxitunn17@gmail.com>'
     EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
     EMAIL_HOST = env('EMAIL_HOST')
     EMAIL_HOST_USER = env('EMAIL_HOST_USER')

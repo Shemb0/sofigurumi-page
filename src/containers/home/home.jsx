@@ -22,7 +22,9 @@ function Home({
   return (
     <Layout>
       <Banner />
+      <hr className="border-sofi-200/60 mx-8" />
       <Productos_arribados data={products_arrival}/>
+      <hr className="border-sofi-200/60 mx-8" />
       <Productos_vendidos data={products_sold}/>
     </Layout>
   );

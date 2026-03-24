@@ -23,7 +23,7 @@ function Product_sold({ data }) {
   }, []);
 
   return (
-    <div className="bg-white">
+    <div>
       <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-baseline sm:justify-between">
           <h2 className="text-2xl font-extrabold tracking-tight text-sofi-800">

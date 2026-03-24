@@ -16,9 +16,11 @@ function Layout({ children, check_authenticated,load_user,refresh,get_user_profi
        get_user_profile();
      }, [check_authenticated, load_user, refresh]);
 return(
-    <div >
+    <div>
         <NavBar/>
-        {children}
+        <div className="bg-gradient-to-br from-sofi-50 via-sofi-100 to-sofi-200 min-h-screen">
+            {children}
+        </div>
         <Footer/>
     </div>
 )

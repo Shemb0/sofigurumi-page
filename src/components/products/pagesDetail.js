@@ -79,27 +79,15 @@ function Product_Detail({
 
   if (!isAuthenticated) return <Navigate to="/Login" />;
 
-  const addToWishlist = async () => {
+  const addToWishlist = async (isPresent) => {
     if (isAuthenticated) {
-      let isPresent = false;
-      if (wishlist && product) {
-        wishlist.map(item => {
-          if (item.product.id.toString() === product.id.toString()) isPresent = true;
-        });
-      }
       if (isPresent) {
         await remove_wishlist_item(product.id);
-        await get_wishlist_items();
-        await get_wishlist_item_total();
       } else {
-        await remove_wishlist_item(product.id);
         await add_wishlist_item(product.id);
-        await get_wishlist_items();
-        await get_wishlist_item_total();
-        await get_items();
-        await get_total();
-        await get_item_total();
       }
+      await get_wishlist_items();
+      await get_wishlist_item_total();
     }
   };
 
@@ -125,7 +113,7 @@ function Product_Detail({
   const inStock = product && product.quantity > product.sold;
 
   return (
-    <div className="min-h-screen bg-sofi-50">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
         {/* Sección principal: imagen + info */}
@@ -296,7 +284,7 @@ function Product_Detail({
 
 const mapStateToProps = (state) => ({
   product: state.Products.product,
-  wishlist: state.Wishlist.wishlist,
+  wishlist: state.Wishlist.items,
   review: state.Reviews.review,
   reviews: state.Reviews.reviews,
   isAuthenticated: state.auth.isAuthenticated,

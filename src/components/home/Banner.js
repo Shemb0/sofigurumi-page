@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 
   function Banner() {
     return (
-      <div className="bg-gradient-to-br from-sofi-50 via-sofi-100 to-sofi-200">
+      <div>
         <div className="max-w-7xl mx-auto py-20 px-4 sm:py-32 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-base font-semibold text-sofi-500 tracking-widest uppercase">

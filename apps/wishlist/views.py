@@ -11,7 +11,7 @@ class GetItemsView(APIView):
         user = self.request.user
 
         try:
-            wishlist = WishList.objects.get(user=user)
+            wishlist = WishList.objects.get_or_create(user=user)[0]
             wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
             result = []
 
@@ -20,7 +20,7 @@ class GetItemsView(APIView):
                     item = {}
                     item['id'] = wishlist_item.id
                     product = Product.objects.get(id=wishlist_item.product.id)
-                    product = ProductSerializer(product)
+                    product = ProductSerializer(product, context={'request': request})
                     item['product'] = product.data
                     result.append(item)
             return Response(
@@ -55,7 +55,7 @@ class AddItemView(APIView):
                 )
 
             product = Product.objects.get(id=product_id)
-            wishlist = WishList.objects.get(user=user)
+            wishlist = WishList.objects.get_or_create(user=user)[0]
 
             if WishListItem.objects.filter(wishlist=wishlist, product=product).exists():
                 return Response(
@@ -97,7 +97,7 @@ class AddItemView(APIView):
 
                 item['id'] = wishlist_item.id
                 product = Product.objects.get(id=wishlist_item.product.id)
-                product = ProductSerializer(product)
+                product = ProductSerializer(product, context={'request': request})
 
                 item['product'] = product.data
 
@@ -120,7 +120,7 @@ class GetItemTotalView(APIView):
         user = self.request.user
 
         try:
-            wishlist = WishList.objects.get(user=user)
+            wishlist = WishList.objects.get_or_create(user=user)[0]
             total_items = wishlist.total_items
 
             return Response(
@@ -148,7 +148,7 @@ class RemoveItemView(APIView):
             )
 
         try:
-            wishlist = WishList.objects.get(user=user)
+            wishlist = WishList.objects.get_or_create(user=user)[0]
             if not Product.objects.filter(id=product_id).exists():
                 return Response(
                     {'error': 'Product with this ID does not exist'},
@@ -165,28 +165,26 @@ class RemoveItemView(APIView):
                 product=product
             ).delete()
 
-            if not WishListItem.objects.filter(wishlist=wishlist, product=product).exists():
-                # Actualiizar el total de items en el wishlist
-                total_items = int(wishlist.total_items) - 1
-                WishList.objects.filter(user=user).update(
-                    total_items=total_items
+            if not WishListItem.objects.filter(wishlist=wishlist).exists():
+                wishlist.delete()
+                return Response(
+                    {'wishlist': []},
+                    status=status.HTTP_200_OK
                 )
-            
-            wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
 
+            total_items = int(wishlist.total_items) - 1
+            WishList.objects.filter(user=user).update(total_items=total_items)
+
+            wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
             result = []
 
-            if WishListItem.objects.filter(wishlist=wishlist).exists():
-                for wishlist_item in wishlist_items:
-                    item = {}
-
-                    item['id'] = wishlist_item.id
-                    product = Product.objects.get(id=wishlist_item.product.id)
-                    product = ProductSerializer(product)
-
-                    item['product'] = product.data
-
-                    result.append(item)
+            for wishlist_item in wishlist_items:
+                item = {}
+                item['id'] = wishlist_item.id
+                product = Product.objects.get(id=wishlist_item.product.id)
+                product = ProductSerializer(product, context={'request': request})
+                item['product'] = product.data
+                result.append(item)
 
             return Response(
                 {'wishlist': result},

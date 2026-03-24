@@ -64,9 +64,11 @@ function CartItem({
 
   const navigate = useNavigate();
 
-  const handleRemoveItem = (productId) => {
-    // Llama a la función remove_item pasando el ID del producto
-    remove_item(productId);
+  const handleRemoveItem = async (item) => {
+    await remove_item(item);
+    await get_items();
+    await get_total();
+    await get_item_total();
   };
 
  

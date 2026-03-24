@@ -1,5 +1,7 @@
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { add_wishlist_item, get_wishlist_items, get_wishlist_item_total, remove_wishlist_item } from '../../redux/actions/wishlist'
+import WishlistHeart from '../products/wishlistHeart'
 
 const products = [
   {
@@ -15,10 +17,23 @@ const products = [
   // More products...
 ];
 
-function Arrivals_products({ data }) {
+function Arrivals_products({ data, isAuthenticated, wishlist, add_wishlist_item, get_wishlist_items, get_wishlist_item_total, remove_wishlist_item }) {
+
+  const addToWishlist = async (product, isPresent) => {
+    if (isAuthenticated) {
+      if (isPresent) {
+        await remove_wishlist_item(product.id);
+      } else {
+        await add_wishlist_item(product.id);
+      }
+      await get_wishlist_items();
+      await get_wishlist_item_total();
+    }
+  }
+
   return (
     
-    <div className="bg-sofi-50">
+    <div>
       <div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="text-2xl font-extrabold tracking-tight text-sofi-800">
           NUEVOS PROYECTOS
@@ -55,9 +70,16 @@ function Arrivals_products({ data }) {
                       {product.name}
                     </Link>
                   </h3>
-                  <p className="text-sm font-bold text-sofi-500 ml-2 flex-shrink-0">
-                    ${product.price}
-                  </p>
+                  <div className="flex items-center flex-shrink-0">
+                    <p className="text-sm font-bold text-sofi-500">
+                      ${product.price}
+                    </p>
+                    <WishlistHeart
+                      product={product}
+                      wishlist={wishlist}
+                      addToWishlist={(isPresent) => addToWishlist(product, isPresent)}
+                    />
+                  </div>
                 </div>
               </div>)
               : (<></>)
@@ -69,6 +91,14 @@ function Arrivals_products({ data }) {
   );
 }
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  wishlist: state.Wishlist.items
+});
 
-export default connect(mapStateToProps, {})(Arrivals_products);
+export default connect(mapStateToProps, {
+  add_wishlist_item,
+  get_wishlist_items,
+  get_wishlist_item_total,
+  remove_wishlist_item
+})(Arrivals_products);
