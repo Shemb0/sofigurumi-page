@@ -216,7 +216,7 @@ export const activate = (uid,token)=> async dispatch =>{
 
     try {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/users/activation/`,body,config)
-            
+
     if (res.status === 204){
 
         dispatch({
@@ -224,19 +224,18 @@ export const activate = (uid,token)=> async dispatch =>{
             payload:res.data
         });
         dispatch(setAlert('Te enviamos un correo por favor activa tu cuenta','green'))
+        dispatch({ type: REMOVE_AUTH_LOADING });
+        return true;
     }else {
         dispatch({
             type: ACTIVATION_FAIL
         })
         dispatch(setAlert('Error al conectar con el servidor','red'));
+        dispatch({ type: REMOVE_AUTH_LOADING });
+        return false;
     };
-    
-    dispatch({
-        type: REMOVE_AUTH_LOADING
-    });
-        
+
     } catch (error) {
-        console.error('Error during signup:', error.response.data);
         dispatch({
             type: ACTIVATION_FAIL
         });
@@ -244,6 +243,7 @@ export const activate = (uid,token)=> async dispatch =>{
             type: REMOVE_AUTH_LOADING
         });
         dispatch(setAlert('Error al conectar con el servidor','red'))
+        return false;
     }
 }
 

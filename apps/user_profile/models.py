@@ -14,5 +14,5 @@ class UserProfile(models.Model):
     country_region = models.CharField(
         max_length=255, choices=Countries.choices, default=Countries.Canada)
 
-def __str__(self):
-    return self.user.email
+    def __str__(self):
+        return self.user.email

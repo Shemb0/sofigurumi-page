@@ -118,7 +118,7 @@ function CartItem({
             leaveFrom="opacity-100 translate-y-0"
             leaveTo="opacity-0 -translate-y-1"
           >
-            <Popover.Panel className="hidden md:block absolute z-10 top-full left-0 mt-2 w-96 rounded-2xl shadow-xl bg-white border border-sofi-100 overflow-hidden">
+            <Popover.Panel className="absolute z-10 top-full right-0 mt-2 w-80 sm:w-96 rounded-2xl shadow-xl bg-white border border-sofi-100 overflow-hidden">
               {/* Header */}
               <div className="px-5 py-4 border-b border-sofi-100 flex items-center justify-between">
                 <h3 className="text-sm font-semibold text-sofi-800">Mi carrito</h3>
@@ -152,6 +152,7 @@ function CartItem({
                           ${items.product.price}
                         </p>
                         <button
+                          type="button"
                           onClick={() => handleRemoveItem(items)}
                           className="text-sofi-300 hover:text-sofi-500 transition-colors duration-150"
                         >

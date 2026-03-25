@@ -132,7 +132,7 @@ class CreateProductReviewView(APIView):
 
             if Review.objects.filter(user=user, product=product).exists():
                 return Response(
-                    {'error': 'Review for this course already created'},
+                    {'error': 'Review for this product already created'},
                     status=status.HTTP_409_CONFLICT
                 )
 

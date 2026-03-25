@@ -31,7 +31,7 @@ function Product_sold({ data }) {
           </h2>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-y-10 sm:grid-cols-3 sm:gap-y-0 sm:gap-x-6 lg:gap-x-8">
+        <div className="mt-6 grid grid-cols-1 gap-y-10 sm:grid-cols-2 sm:gap-y-0 sm:gap-x-6 lg:grid-cols-3 lg:gap-x-8">
           {data &&
             data !== null &&
             data !== undefined &&

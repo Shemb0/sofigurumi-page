@@ -16,6 +16,8 @@ import OrdersDetails from "./containers/pages/dashboard/OrdersDetails/ordersDeta
 import Profile from "containers/pages/dashboard/profile/profile";
 import Login from "containers/auth/login";
 import SingUp from "containers/auth/register"
+import AboutPage from "containers/pages/about"
+import ContactPage from "containers/pages/contact"
 
 
 
@@ -38,6 +40,12 @@ function App() {
          
             {/* categorias */}
             <Route path="/categories" element={<Categorias />}></Route>
+
+            {/* Sobre nosotros */}
+            <Route path="/about" element={<AboutPage />}></Route>
+
+            {/* Contacto */}
+            <Route path="/contact" element={<ContactPage />}></Route>
 
             {/* Busqueda de productos */}
             <Route path="/search/" element={<Busqueda/>}></Route>

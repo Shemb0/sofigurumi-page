@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { CheckIcon, XIcon } from "@heroicons/react/solid";
-import { remove_item, update_item } from "../../redux/actions/cart";
+import { remove_item, update_item, get_items, get_total, get_item_total } from "../../redux/actions/cart";
 import { setAlert } from "../../redux/actions/alert";
 import { useEffect, useState } from "react";
 import { get_payment_total, process_payment } from "../../redux/actions/payment";
@@ -35,6 +35,10 @@ function CartPageContent({
   update_item,
   remove_item,
   process_payment,
+  get_payment_total,
+  get_items,
+  get_total,
+  get_item_total,
   user,
   made_payment,
   loading,
@@ -62,7 +66,21 @@ function CartPageContent({
   } = formData;
 
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-  const remove = (product_id) => remove_item(product_id);
+  const remove = async (cartItem) => {
+    await remove_item(cartItem);
+    await get_items();
+    await get_total();
+    await get_item_total();
+    await get_payment_total();
+  };
+
+  const update = async (cartItem, newCount) => {
+    await update_item(cartItem, newCount);
+    await get_items();
+    await get_total();
+    await get_item_total();
+    await get_payment_total();
+  };
 
   const buy = async () => {
     if (!stripe || !elements) return;
@@ -171,7 +189,7 @@ function CartPageContent({
                           <p className="text-sm font-bold text-sofi-500 flex-shrink-0">${product.product.price}</p>
                         </div>
                         <div className="mt-3">
-                          <ProductForm onChange={onChange} remove={remove} product={product} />
+                          <ProductForm remove={remove} update={update} product={product} />
                         </div>
                         <div className="flex items-center gap-1.5 mt-2">
                           {product.product.quantity > product.product.sold ? (
@@ -214,6 +232,7 @@ function CartPageContent({
             onChange={onChange}
             buy={buy}
             user={user}
+            items={items}
             total_amount={total_amount}
             total_compare_amount={total_compare_amount}
             estimated_tax={estimated_tax}
@@ -257,8 +276,11 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   remove_item,
-  get_payment_total,
   update_item,
+  get_items,
+  get_total,
+  get_item_total,
+  get_payment_total,
   setAlert,
   refresh,
   process_payment,

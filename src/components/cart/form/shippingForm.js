@@ -10,6 +10,7 @@ const ShippingForm = ({
   onChange,
   buy,
   user,
+  items,
   total_amount,
   total_compare_amount,
   estimated_tax,
@@ -19,6 +20,10 @@ const ShippingForm = ({
     e.preventDefault();
     buy();
   };
+
+  const subtotal = items
+    ? items.reduce((acc, item) => acc + parseFloat(item.product.price) * item.count, 0).toFixed(2)
+    : "0.00";
 
   const inputClass = "w-full rounded-xl border border-sofi-200 px-4 py-2.5 text-sm text-sofi-800 placeholder-sofi-300 focus:ring-2 focus:ring-sofi-300 focus:border-sofi-300 outline-none transition";
   const labelClass = "block text-sm font-medium text-sofi-700 mb-1.5";
@@ -31,18 +36,23 @@ const ShippingForm = ({
         <div className="px-6 py-4 border-b border-sofi-100">
           <h2 id="summary-heading" className="text-sm font-semibold text-sofi-800">Resumen del pedido</h2>
         </div>
-        <div className="px-6 py-4 space-y-2.5 border-b border-sofi-100">
-          <div className="flex justify-between text-sm text-sofi-600">
-            <span>Subtotal</span>
-            <span className="font-medium text-sofi-800">${total_compare_amount}</span>
-          </div>
-          <div className="flex justify-between text-sm text-sofi-600">
-            <span>Impuestos estimados</span>
-            <span className="font-medium text-sofi-800">${estimated_tax}</span>
-          </div>
-          <div className="flex justify-between text-sm font-bold text-sofi-800 pt-2 border-t border-sofi-100">
-            <span>Total</span>
-            <span className="text-sofi-500">${total_amount}</span>
+        <div className="px-6 py-4 space-y-2 border-b border-sofi-100">
+          {/* Separador, tax y totales */}
+          <div className="pt-2 border-t border-sofi-100 space-y-2">
+            <div className="flex justify-between text-sm text-sofi-600">
+              <span>Total sin IVA</span>
+              <span className="font-medium text-sofi-800">${subtotal}</span>
+            </div>
+            {estimated_tax > 0 && (
+              <div className="flex justify-between text-sm text-sofi-600">
+                <span>IVA estimado</span>
+                <span className="font-medium text-sofi-800">${estimated_tax}</span>
+              </div>
+            )}
+            <div className="flex justify-between text-sm font-bold text-sofi-800 pt-1 border-t border-sofi-100">
+              <span>Total</span>
+              <span className="text-sofi-500">${total_amount}</span>
+            </div>
           </div>
         </div>
 
@@ -87,7 +97,7 @@ const ShippingForm = ({
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className={labelClass}>Ciudad *</label>
                 <input
@@ -112,7 +122,7 @@ const ShippingForm = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className={labelClass}>Código postal *</label>
                 <input
