@@ -1,6 +1,7 @@
 import { connect } from "react-redux"
 import { Link } from "react-router-dom"
 import logo from "../../assets/img/logo/sofi.png"
+import amigurumi from "../../assets/img/AMIGURUMI2.jpg"
 
 function About() {
   return (
@@ -36,11 +37,11 @@ function About() {
             </div>
           </div>
 
-          {/* Imagen — reemplazá src por una foto de tus amigurumis */}
+          
           <div className="mt-12 lg:mt-0">
             <div className="rounded-3xl overflow-hidden shadow-2xl aspect-square bg-sofi-100 flex items-center justify-center">
               <img
-                src="https://images.unsplash.com/photo-1615486511484-92e172cc4fe0?auto=format&fit=crop&w=800&q=80"
+                src={amigurumi}
                 alt="Amigurumis artesanales"
                 className="w-full h-full object-cover"
                 onError={(e) => { e.target.style.display = 'none' }}
