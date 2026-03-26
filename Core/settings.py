@@ -110,27 +110,24 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 #in this place put on all the domain that will have access to the applications
 CORS_ALLOWED_ORIGINS = [
-     "http://localhost:3000",
+    "http://localhost:3000",
     "http://localhost:8000",
     "http://127.0.0.1:3000",
-    "http://127.0.0.1:3000",
-  
+    "https://sofigurumi-page.vercel.app",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://localhost:8000',
     'http://127.0.0.1:3000',
-    'http://127.0.0.1:3000',
- 
-] 
+    'https://sofigurumi-page.vercel.app',
+]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8000',
     'http://127.0.0.1:3000',
-    'http://127.0.0.1:3000',
-   
+    'https://sofigurumi-page.vercel.app',
 ]
 
 PASSWORD_HASHERS = [ #this is to make all password will be more safe
