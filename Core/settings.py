@@ -128,6 +128,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:3000',
     'https://sofigurumi-page.vercel.app',
+    'https://sofigurumi-page-production.up.railway.app',
 ]
 
 PASSWORD_HASHERS = [ #this is to make all password will be more safe
